@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,14 +23,12 @@ public class DividaModel {
     private Long id;
 
     // CPF do devedor
-    @Setter
     @NotBlank
     @Size(min = 11, max = 11)
     @Column(name = "cpf_devedor", nullable = false, length = 11)
     private String cpfDevedor;
 
     // Valor originalmente tomado pelo devedor
-    @Setter
     @NotNull
     @Positive
     @Column(name = "valor_pego", nullable = false, precision = 10, scale = 2)
@@ -55,13 +51,28 @@ public class DividaModel {
     private DividaStatus status;
 
     // Data em que a dívida foi criada
-    @CreationTimestamp
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
     // Data de vencimento da dívida
-    @Setter
     @Column(name = "data_vencimento", nullable = false)
     private LocalDate dataVencimento;
+
+    // CONSTRUTORES
+
+    // Construtor vazio para JPA/Hibernate
+    protected DividaModel() {
+    }
+
+    public DividaModel(String cpfDevedor, BigDecimal valorPego, BigDecimal valorComJuros, BigDecimal valorComDesconto, DividaStatus status,LocalDateTime dataCriacao, LocalDate dataVencimento) {
+        this.cpfDevedor = cpfDevedor;
+        this.valorPego = valorPego;
+        this.valorComJuros = valorComJuros;
+        this.valorComDesconto = valorComDesconto;
+        this.status = status;
+        this.dataCriacao = dataCriacao;
+        this.dataVencimento = dataVencimento;
+    }
+
 
 }
