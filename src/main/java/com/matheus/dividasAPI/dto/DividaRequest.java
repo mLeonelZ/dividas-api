@@ -14,6 +14,14 @@ public record DividaRequest(
 
         @NotNull
         @Positive
-        BigDecimal valorPego
+        BigDecimal valorPego,
+
+        @NotNull
+        @Positive
+        BigDecimal valorComJuros,
+
+        @NotNull
+        @Positive
+        BigDecimal valorComDesconto
 ) {
 }
