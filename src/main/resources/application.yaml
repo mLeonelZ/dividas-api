@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: dividasAPI
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dividas
+    username:  ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
