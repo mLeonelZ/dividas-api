@@ -25,6 +25,8 @@ public class DividaService {
 
     public DividaResponse cadastrar(DividaRequest request){
 
+        validarValoresDeEntrada(request);
+
         LocalDateTime dataCriacao = LocalDateTime.now();
         LocalDate dataVencimento = dataCriacao.toLocalDate().plusDays(30);
 
@@ -57,6 +59,9 @@ public class DividaService {
                     "Não é possível alterar uma dívida que está " + model.getStatus().name()
             );
         }
+
+        validarValoresDeEntrada(request);
+
         model.atualizar(request.cpfDevedor(), request.valorPego(), request.valorComJuros(), request.valorComDesconto());
         DividaModel atualizado = repository.save(model);
         return DividaMapper.toResponse(atualizado);
@@ -70,6 +75,20 @@ public class DividaService {
     private DividaModel buscarId(Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new DividaNotFoundException("Divida não encontrada: " + id));
+    }
+
+    private void validarValoresDeEntrada(DividaRequest request){
+        // Com BigDecimal utilizar .compareTo() para evitar falsos-negativos
+        if (request.valorComJuros().compareTo(request.valorPego()) < 0 ){
+            throw new DividaUpdateException(
+                    "O valor com juros não pode ser menor que o valor pego"
+            );
+        }
+        if (request.valorComDesconto().compareTo(request.valorComJuros()) > 0) {
+            throw new DividaUpdateException(
+                    "O valor com desconto não pode ser maior que o valor com juros"
+            );
+        }
     }
 
 }
