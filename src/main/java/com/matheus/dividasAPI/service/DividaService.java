@@ -61,6 +61,11 @@ public class DividaService {
         return DividaMapper.toResponse(atualizado);
     }
 
+    public void deletar(Long id){
+        DividaModel model = buscarId(id);
+        repository.delete(model);
+    }
+
     private DividaModel buscarId(Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new DividaNotFoundException("Divida não encontrada: " + id));
