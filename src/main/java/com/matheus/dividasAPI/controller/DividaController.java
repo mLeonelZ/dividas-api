@@ -37,5 +37,10 @@ public class DividaController {
         return ResponseEntity.ok(service.listarPorId(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<DividaResponse> atualizar(@PathVariable Long id, @Valid @RequestBody DividaRequest request){
+        return ResponseEntity.ok(service.atualizar(id,request));
+    }
+
 
 }

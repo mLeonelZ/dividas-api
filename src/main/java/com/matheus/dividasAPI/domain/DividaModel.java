@@ -74,5 +74,13 @@ public class DividaModel {
         this.dataVencimento = dataVencimento;
     }
 
+    // MÉTODOS
+
+    public void atualizar( String cpfDevedor, BigDecimal valorPego, BigDecimal valorComJuros, BigDecimal valorComDesconto){
+        this.cpfDevedor = cpfDevedor;
+        this.valorPego = valorPego;
+        this.valorComJuros = valorComJuros;
+        this.valorComDesconto = valorComDesconto;
+    }
 
 }

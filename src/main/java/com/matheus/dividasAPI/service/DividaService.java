@@ -45,11 +45,25 @@ public class DividaService {
     }
 
     public DividaResponse listarPorId(Long id){
-        DividaModel model = repository.findById(id)
-                .orElseThrow(() -> new DividaNotFoundException("Divida não encontrada: " + id));
-
+        DividaModel model = buscarId(id);
         return DividaMapper.toResponse(model);
     }
 
+    public DividaResponse atualizar(Long id, DividaRequest request){
+        DividaModel model = buscarId(id);
+        if (model.getStatus() == DividaStatus.PAGA || model.getStatus() == DividaStatus.CANCELADA) {
+            throw new IllegalStateException(
+                    "Não é possível alterar uma dívida que está " + model.getStatus().name()
+            );
+        }
+        model.atualizar(request.cpfDevedor(), request.valorPego(), request.valorComJuros(), request.valorComDesconto());
+        DividaModel atualizado = repository.save(model);
+        return DividaMapper.toResponse(atualizado);
+    }
+
+    private DividaModel buscarId(Long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new DividaNotFoundException("Divida não encontrada: " + id));
+    }
 
 }
