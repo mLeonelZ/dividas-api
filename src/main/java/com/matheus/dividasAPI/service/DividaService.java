@@ -5,6 +5,7 @@ import com.matheus.dividasAPI.dto.DividaRequest;
 import com.matheus.dividasAPI.dto.DividaResponse;
 import com.matheus.dividasAPI.enums.DividaStatus;
 import com.matheus.dividasAPI.exceptions.DividaNotFoundException;
+import com.matheus.dividasAPI.exceptions.DividaUpdateException;
 import com.matheus.dividasAPI.mapper.DividaMapper;
 import com.matheus.dividasAPI.repository.DividaRepository;
 import org.springframework.data.domain.Page;
@@ -52,7 +53,7 @@ public class DividaService {
     public DividaResponse atualizar(Long id, DividaRequest request){
         DividaModel model = buscarId(id);
         if (model.getStatus() == DividaStatus.PAGA || model.getStatus() == DividaStatus.CANCELADA) {
-            throw new IllegalStateException(
+            throw new DividaUpdateException(
                     "Não é possível alterar uma dívida que está " + model.getStatus().name()
             );
         }
