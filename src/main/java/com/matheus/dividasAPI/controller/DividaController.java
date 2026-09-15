@@ -2,11 +2,11 @@ package com.matheus.dividasAPI.controller;
 
 import com.matheus.dividasAPI.dto.DividaRequest;
 import com.matheus.dividasAPI.dto.DividaResponse;
-import com.matheus.dividasAPI.exceptions.DividaNotFoundException;
 import com.matheus.dividasAPI.exceptions.ErrorResponse;
 import com.matheus.dividasAPI.service.DividaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -43,7 +43,16 @@ public class DividaController {
                     description = "Dados da dívida são inválidos",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                {
+                    "status": 400,
+                    "message": "cpfDevedor: tamanho deve ser entre 11 e 11",
+                    "timestamp": "2026-09-15T19:30:00"
+                }
+                """
+                            )
                     ) )
     })
     @PostMapping
@@ -105,7 +114,16 @@ public class DividaController {
                     description = "Dados da dívida são inválidos!",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                {
+                    "status": 400,
+                    "message": "cpfDevedor: tamanho deve ser entre 11 e 11",
+                    "timestamp": "2026-09-15T19:30:00"
+                }
+                """
+                            )
                     )
             ),
             @ApiResponse(
@@ -113,7 +131,16 @@ public class DividaController {
                     description = "Dívida não pode ser atualizada",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                {
+                    "status": 409,
+                    "message": "Não é possível alterar uma dívida que está PAGA",
+                    "timestamp": "2026-09-15T19:30:00"
+                }
+                """
+                            )
                     )
             )
     })
