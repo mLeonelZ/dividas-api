@@ -368,7 +368,7 @@ public class DividaControllerTest {
     }
 
     @Test // divida nao existente
-    void deve() throws Exception{
+    void deveRetornar404QuandoDividaNaoExistir() throws Exception{
         doThrow(new DividaNotFoundException("Divida não encontrada: 999"))
                 .when(service).deletar(999L);
         mockMvc.perform(
@@ -380,6 +380,59 @@ public class DividaControllerTest {
                 .andExpect(jsonPath("$.timestamp").exists());
 
         verify(service).deletar(999L);
+    }
+
+    @Test
+    void deveRetornar400QuandoCpfForInvalido() throws Exception{
+        String request = """
+            {
+                "cpfDevedor": "52998224726",
+                "valorPego": 1000.00,
+                "valorComJuros": 1200.00,
+                "valorComDesconto": 1100.00
+            }
+            """;
+
+        mockMvc.perform(
+                post("/dividas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request)
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornar400QuandoCpfTiverQuantidadeDeDigitosInvalida() throws Exception {
+        String request = """
+            {
+                "cpfDevedor": "5299822472",
+                "valorPego": 1000.00,
+                "valorComJuros": 1200.00,
+                "valorComDesconto": 1100.00
+            }
+            """;
+
+        mockMvc.perform(post("/dividas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornar400QuandoCpfPossuirCaracteresNaoNumericos() throws Exception {
+        String request = """
+            {
+                "cpfDevedor": "5299822472A",
+                "valorPego": 1000.00,
+                "valorComJuros": 1200.00,
+                "valorComDesconto": 1100.00
+            }
+            """;
+
+        mockMvc.perform(post("/dividas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
     }
 
 }

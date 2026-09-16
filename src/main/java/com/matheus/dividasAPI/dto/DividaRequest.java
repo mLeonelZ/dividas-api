@@ -1,20 +1,20 @@
 package com.matheus.dividasAPI.dto;
 
+import com.matheus.dividasAPI.validation.ValidCpf;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public record DividaRequest(
+
         @Schema(
                 description = "CPF do devedor com 11 dígitos",
                 example = "12345678901"
         )
         @NotBlank
-        @Size(min = 11, max = 11)
+        @ValidCpf
+        @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 dígitos")
         String cpfDevedor,
 
         @Schema(
